@@ -25,10 +25,10 @@ def main():
     parser.add_argument('--out', dest='output', required=True,
                         help='Output text file.')
     args = parser.parse_args()
-    with open(args.input, 'r') as fin:        
+    with open(args.input, 'r') as fin:    
         with open(args.output, 'w') as fout:
-            for line in fin.readlines():            
-                line = re.sub('( -| )\d+\.\d+e-\d\d', double2float, line)   
+            for line in fin:
+                line = re.sub('( -| )\d+\.\d+e-\d\d', double2float, line)
                 fout.write(line)
                 
     

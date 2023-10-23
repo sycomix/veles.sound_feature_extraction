@@ -63,15 +63,15 @@ class Feature(object):
         '''
         Constructs a string which describes this feature calculation plan
         '''
-        result = self.name + " ["
+        result = f"{self.name} ["
         for transform in self.transforms:
             add = True
             if transform.condition:
                 add = eval(transform.condition, cond_locals)
             if add:
-                result += transform.native_description + ", "
-        result = result[:-2] + "]"
-        logging.debug("Constructed feature description: " + result)
+                result += f"{transform.native_description}, "
+        result = f"{result[:-2]}]"
+        logging.debug(f"Constructed feature description: {result}")
         return result
 
     def __str__(self):
@@ -82,7 +82,7 @@ class Feature(object):
             if transform.parameters and len(transform.parameters) > 0:
                 res += " ("
                 for param in transform.parameters:
-                    res += param + " = " + transform.parameters[param] + ","
+                    res += f"{param} = {transform.parameters[param]},"
                 res = res[:-1]
                 res += ")"
             res += "\n"
@@ -100,8 +100,7 @@ class Feature(object):
                               tdescription):
             trname = re.match("\\w+", tm.group()).group()
             parameters = {}
-            pstrm = re.search("(?<=\\()[^\\)]*(?=\\))", tm.group())
-            if pstrm:
+            if pstrm := re.search("(?<=\\()[^\\)]*(?=\\))", tm.group()):
                 for line in pstrm.group().split(","):
                     kv = line.split("=")
                     parameters[kv[0].strip()] = kv[1].strip()
@@ -109,11 +108,10 @@ class Feature(object):
             cond = trcond.group()[1:-1] if trcond else None
             regtr = Explorer().transforms.get(trname)
             if not regtr:
-                if len(transforms) > 0:
-                    regtr = Explorer().transforms.get(
-                        trname + " (" + transforms[-1].output_format + ")")
+                if transforms:
+                    regtr = Explorer().transforms.get(f"{trname} ({transforms[-1].output_format})")
                 else:
-                    regtr = Explorer().transforms.get(trname + " (Raw<short>)")
+                    regtr = Explorer().transforms.get(f"{trname} (Raw<short>)")
             if regtr:
                 transforms.append(Transform(trname, regtr.description,
                                             regtr.supported_parameters,

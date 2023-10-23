@@ -110,7 +110,7 @@ class Extractor(object):
             length = rlengths[0][i]
             fname = Library().string(fnames[0][i]).decode()
             feature = self.features_dict[fname]
-            self.logger.debug(feature.name + " yielded %d bytes", length)
+            self.logger.debug(f"{feature.name} yielded %d bytes", length)
             buffer = Library().buffer(results[0][i], length)
             format_name = feature.transforms[-1].output_format
             if format_name == "":

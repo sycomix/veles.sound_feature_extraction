@@ -52,7 +52,7 @@ class Test(unittest.TestCase):
         buffer = numpy.ones(48000, dtype=numpy.int16)
         buffer *= 1000
         results = extr.calculate(buffer)
-        print("Calculated results: %s" % results["MFCC"])
+        print(f'Calculated results: {results["MFCC"]}')
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'Test.testExtractor']

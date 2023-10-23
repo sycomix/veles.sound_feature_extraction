@@ -39,8 +39,10 @@ class TransformParameter(object):
         self.default_value = str(default_value)
 
     def __str__(self):
-        return "Name: " + self.name + "\nDescription: " + \
-            self.description + "\nDefault: " + self.default_value
+        return (
+            (f"Name: {self.name}" + "\nDescription: " + self.description)
+            + "\nDefault: "
+        ) + self.default_value
 
 
 class Transform(object):
@@ -114,13 +116,13 @@ class Transform(object):
                                        self.description_str)
 
     def _get_supported_parameters_string(self):
-        result = ""
-        for _, pvalue in sorted(self.supported_parameters.items()):
-            result += "\t%s\n\n" % str(pvalue).replace("\n", "\n\t")
-        return result
+        return "".join(
+            "\t%s\n\n" % str(pvalue).replace("\n", "\n\t")
+            for _, pvalue in sorted(self.supported_parameters.items())
+        )
 
     def _get_parameters_string(self):
-        result = ""
-        for pname, pvalue in sorted(self.parameters.items()):
-            result += "\t%s = %s\n\n" % (pname, pvalue)
-        return result
+        return "".join(
+            "\t%s = %s\n\n" % (pname, pvalue)
+            for pname, pvalue in sorted(self.parameters.items())
+        )

@@ -39,7 +39,7 @@ class Formatters(object):
 
     @staticmethod
     def reinterpret_cast(array, type_name):
-        return array.view(ctypes.__dict__["c_" + type_name])
+        return array.view(ctypes.__dict__[f"c_{type_name}"])
 
     @staticmethod
     def parse(array, format_name):
@@ -47,11 +47,7 @@ class Formatters(object):
             if format_name.endswith("*"):
                 format_name = format_name[:-1]
             conv_array = Formatters.reinterpret_cast(array, format_name)
-            if conv_array.size > 1:
-                return conv_array
-            else:
-                return conv_array[0]
-
+            return conv_array if conv_array.size > 1 else conv_array[0]
         if format_name.find("FixedArray<") > -1:
             length_pos = format_name.find(")")
             comma_pos = format_name.find(",")
@@ -65,7 +61,7 @@ class Formatters(object):
                     " (format %s)", res.size, length, format_name)
             return res
         if format_name.startswith("Window<"):
-            atype = format_name[7:len(format_name) - 1]
+            atype = format_name[7:-1]
             return Formatters.reinterpret_cast(array, atype)
         if format_name.startswith("std::tuple"):
             Formatters.logger.error("Not implemented yet")
